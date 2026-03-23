@@ -10,7 +10,8 @@ A modular Python application that automates the execution of OS2200 test package
 TestRepo/
 ├── README.md
 ├── requirements.txt
-├── main.py                    # Entry point / workflow orchestrator
+├── main.py                    # Console entry point / workflow orchestrator
+├── streamlit_app.py           # Streamlit web UI entry point
 ├── config.py                  # Configuration constants
 ├── credentials_manager.py     # Session-cached FTP/TELNET credentials
 ├── ftp_handler.py             # FTP upload/download operations
@@ -28,7 +29,8 @@ TestRepo/
     ├── test_telnet_handler.py
     ├── test_ssg_generator.py
     ├── test_pollers.py
-    └── test_comparator.py
+    ├── test_comparator.py
+    └── test_streamlit_app.py
 ```
 
 ---
@@ -49,6 +51,7 @@ TestRepo/
 | `progress_indicator.py` | Terminal progress display with emoji status icons for each step |
 | `workflow_manager.py` | Coordinates all steps; supports pause, resume, retry, and graceful failure handling |
 | `main.py` | CLI entry point; parses arguments and drives the workflow |
+| `streamlit_app.py` | Streamlit web UI; same workflow accessible from a browser |
 
 ---
 
@@ -72,6 +75,8 @@ pip install -r requirements.txt
 
 ## How to Run
 
+### Console Mode (unchanged)
+
 ```bash
 python main.py [OPTIONS]
 ```
@@ -91,6 +96,22 @@ python main.py [OPTIONS]
 ```bash
 python main.py --telnet-host os2200.example.com --log-level DEBUG
 ```
+
+### Web UI Mode (Streamlit)
+
+```bash
+streamlit run streamlit_app.py
+```
+
+This launches a browser-based interface at `http://localhost:8501` with the same 7-step workflow:
+
+- **Sidebar** — configure TELNET host/port, FTP paths, and log level.
+- **Step 1** — enter FTP credentials via a web form.
+- **Step 2** — review and edit the generated SSG script in a text area.
+- **Steps 3-7** — execute automatically with real-time progress indicators.
+- **Reset** — use the sidebar button to start a new workflow run.
+
+The original console-based flow (`python main.py`) is fully preserved.
 
 ---
 
